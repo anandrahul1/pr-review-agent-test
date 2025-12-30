@@ -1,0 +1,51 @@
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Invoke PR Review Agent
+        run: |
+          cd /tmp
+          cat > payload.json << 'EOF'
+          {
+            "jsonrpc": "2.0",
+            "id": "pr-${{ github.event.pull_request.number }}",
+            "method": "message/send",
+            "params": {
+              "message": {
+                "role": "user",
+                "parts": [{
+                  "kind": "text",
+                  "text": "Review PR #${{ github.event.pull_request.number }} in ${{ github.repository }}"
+                }],
+                "messageId": "gh-action-${{ github.run_id }}"
+              }
+            }
+          }
+          EOF
+          
+          aws bedrock-agentcore invoke-runtime \
+            --runtime-id x-bMWWBTEmLd \
+            --region us-east-1 \
+            --cli-binary-format raw-in-base64-out \
+            --payload file://payload.json \
+            /tmp/response.json
+          
+          echo "✅ PR review completed"
+          cat /tmp/response.json
