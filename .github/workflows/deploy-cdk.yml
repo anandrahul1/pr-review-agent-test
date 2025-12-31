@@ -52,6 +52,9 @@ jobs:
       - name: Deploy with CDK
         env:
           GITHUB_TOKEN: ${{ secrets.PR_REVIEW_GITHUB_TOKEN }}
+          JIRA_URL: ${{ secrets.JIRA_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: npx cdk deploy --require-approval never
 
       - name: Get Runtime ARN

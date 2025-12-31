@@ -33,6 +33,9 @@ export class PrReviewAgentStack extends cdk.Stack {
       protocolConfiguration: agentcore.ProtocolType.A2A,
       environmentVariables: {
         GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+        JIRA_URL: process.env.JIRA_URL || '',
+        JIRA_EMAIL: process.env.JIRA_EMAIL || '',
+        JIRA_API_TOKEN: process.env.JIRA_API_TOKEN || '',
       },
     });
 
