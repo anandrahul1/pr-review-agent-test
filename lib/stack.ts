@@ -40,7 +40,10 @@ export class PrReviewAgentStack extends cdk.Stack {
     runtime.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ['bedrock:InvokeModel*'],
-        resources: ['arn:aws:bedrock:*::foundation-model/*'],
+        resources: [
+          'arn:aws:bedrock:*::foundation-model/*',
+          'arn:aws:bedrock:*:*:inference-profile/*',
+        ],
       })
     );
 
