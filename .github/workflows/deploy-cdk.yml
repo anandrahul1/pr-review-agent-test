@@ -51,7 +51,7 @@ jobs:
 
       - name: Deploy with CDK
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_AGENT }}
+          GITHUB_TOKEN: ${{ secrets.PR_REVIEW_GITHUB_TOKEN }}
         run: npx cdk deploy --require-approval never
 
       - name: Get Runtime ARN
