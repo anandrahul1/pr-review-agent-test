@@ -24,18 +24,50 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install AgentCore CLI
-        run: pip install "bedrock-agentcore-starter-toolkit>=0.1.21"
+      - name: Install dependencies
+        run: pip install boto3
 
       - name: Invoke PR Review Agent
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          repo="${{ github.repository }}"
-          pr_number="${{ github.event.pull_request.number }}"
+          python3 << 'EOF'
+          import boto3
+          import json
           
-          agentcore invoke --agent prreviewagent-0wXytaGYLt "{\"jsonrpc\": \"2.0\", \"id\": \"pr-${pr_number}\", \"method\": \"message/send\", \"params\": {\"message\": {\"role\": \"user\", \"parts\": [{\"kind\": \"text\", \"text\": \"Review PR #${pr_number} in ${repo}\"}]}}}"
-          echo "✅ Agent invoked for PR #${pr_number}"
+          repo = "${{ github.repository }}"
+          pr_number = "${{ github.event.pull_request.number }}"
+          runtime_arn = "arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
+          
+          client = boto3.client('bedrock-agentcore', region_name='us-east-1')
+          
+          payload = {
+              "jsonrpc": "2.0",
+              "id": f"pr-{pr_number}",
+              "method": "message/send",
+              "params": {
+                  "message": {
+                      "role": "user",
+                      "parts": [{
+                          "kind": "text",
+                          "text": f"Review PR #{pr_number} in {repo}"
+                      }],
+                      "messageId": f"pr-{pr_number}"
+                  }
+              }
+          }
+          
+          try:
+              response = client.invoke_runtime(
+                  runtimeIdentifier=runtime_arn,
+                  body=json.dumps(payload)
+              )
+              print(f"✅ Agent invoked for PR #{pr_number}")
+              print(f"Response: {response}")
+          except Exception as e:
+              print(f"⚠️ Invocation failed: {e}")
+              exit(1)
+          EOF
 
       - name: Comment on PR
         uses: actions/github-script@v7
