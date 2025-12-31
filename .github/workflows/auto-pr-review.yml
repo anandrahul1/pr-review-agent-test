@@ -1,0 +1,86 @@
+name: Auto PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install boto3
+        run: pip install boto3
+
+      - name: Invoke PR Review Agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 << 'EOF'
+          import boto3
+          import json
+          import uuid
+          import os
+          
+          runtime_arn = "arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
+          repo = "${{ github.repository }}"
+          pr_number = "${{ github.event.pull_request.number }}"
+          
+          # Create payload
+          payload = {
+              "jsonrpc": "2.0",
+              "id": f"pr-{pr_number}-auto",
+              "method": "message/send",
+              "params": {
+                  "message": {
+                      "role": "user",
+                      "parts": [{
+                          "kind": "text",
+                          "text": f"Review PR #{pr_number} in {repo}"
+                      }],
+                      "messageId": f"pr-{pr_number}-auto"
+                  }
+              }
+          }
+          
+          # Invoke agent
+          client = boto3.client('bedrock-agent-runtime', region_name='us-east-1')
+          
+          try:
+              response = client.invoke_agent(
+                  agentId=runtime_arn.split('/')[-1],
+                  agentAliasId='TSTALIASID',
+                  sessionId=str(uuid.uuid4()),
+                  inputText=f"Review PR #{pr_number} in {repo}"
+              )
+              print(f"✅ Agent invoked for PR #{pr_number}")
+          except Exception as e:
+              print(f"⚠️ Invocation failed: {e}")
+              print("Agent will need to be invoked manually")
+          EOF
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🤖 PR Review Agent triggered! Analysis in progress...'
+            })
