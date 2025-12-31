@@ -34,8 +34,7 @@ jobs:
           repo="${{ github.repository }}"
           pr_number="${{ github.event.pull_request.number }}"
           
-          agentcore configure -r prreviewagent-0wXytaGYLt --non-interactive
-          agentcore invoke "{\"jsonrpc\": \"2.0\", \"id\": \"pr-${pr_number}\", \"method\": \"message/send\", \"params\": {\"message\": {\"role\": \"user\", \"parts\": [{\"kind\": \"text\", \"text\": \"Review PR #${pr_number} in ${repo}\"}]}}}"
+          agentcore invoke --agent prreviewagent-0wXytaGYLt "{\"jsonrpc\": \"2.0\", \"id\": \"pr-${pr_number}\", \"method\": \"message/send\", \"params\": {\"message\": {\"role\": \"user\", \"parts\": [{\"kind\": \"text\", \"text\": \"Review PR #${pr_number} in ${repo}\"}]}}}"
           echo "✅ Agent invoked for PR #${pr_number}"
 
       - name: Comment on PR
