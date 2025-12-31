@@ -1,0 +1,86 @@
+🚀 Launching Bedrock AgentCore (codebuild mode - RECOMMENDED)...
+   • Build ARM64 containers in the cloud with CodeBuild
+   • No local Docker required (DEFAULT behavior)
+   • Production-ready deployment
+
+💡 Deployment options:
+   • agentcore deploy                → CodeBuild (current)
+   • agentcore deploy --local        → Local development
+   • agentcore deploy --local-build  → Local build + cloud deploy
+
+Using existing memory: research_crew_agent_mem-NKBDvx5pKz
+Starting CodeBuild ARM64 deployment for agent 'x' to account 216989103085 (us-east-1)
+Setting up AWS resources (ECR repository, execution roles)...
+Using ECR repository from config: 216989103085.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-x-agent
+Using execution role from config: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+Preparing CodeBuild project and uploading source...
+Using CodeBuild role from config: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+Using dockerignore.template with 46 patterns for zip filtering
+Including Dockerfile from /home/ubuntu/prreview/.bedrock_agentcore/x in source.zip
+Uploaded source to S3: x/source.zip
+Using CodeBuild project from config: bedrock-agentcore-x-agent-builder
+Starting CodeBuild build (this may take several minutes)...
+Starting CodeBuild monitoring...
+🔄 QUEUED started (total: 0s)
+✅ QUEUED completed in 1.0s
+🔄 PROVISIONING started (total: 1s)
+✅ PROVISIONING completed in 7.2s
+🔄 DOWNLOAD_SOURCE started (total: 8s)
+✅ DOWNLOAD_SOURCE completed in 2.1s
+🔄 BUILD started (total: 10s)
+✅ BUILD completed in 13.4s
+🔄 POST_BUILD started (total: 24s)
+✅ POST_BUILD completed in 9.3s
+🔄 COMPLETED started (total: 33s)
+✅ COMPLETED completed in 1.0s
+🎉 CodeBuild completed successfully in 0m 34s
+CodeBuild completed successfully
+CodeBuild project configuration saved
+Deploying to Bedrock AgentCore...
+Passing memory configuration to agent: research_crew_agent_mem-NKBDvx5pKz
+⚠️ Session ID will be reset to connect to the updated agent. The previous agent remains accessible via the original session ID: a363bdb6-d214-4b23-a2df-43e13e28c16a
+Agent created/updated: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd
+Observability is enabled, configuring observability components...
+CloudWatch Logs resource policy already configured
+X-Ray trace destination already configured
+X-Ray indexing rule already configured
+Transaction Search already fully configured
+ObservabilityDeliveryManager initialized for region: us-east-1, account: 216989103085
+✅ Logs auto-created by AWS for runtime/x-bMWWBTEmLd
+✅ Traces delivery enabled for runtime/x-bMWWBTEmLd
+Observability enabled for runtime/x-bMWWBTEmLd - logs: True, traces: True
+✅ X-Ray traces delivery enabled for agent x-bMWWBTEmLd
+🔍 GenAI Observability Dashboard:
+   https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core
+Polling for endpoint to be ready...
+Agent endpoint: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd/runtime-endpoint/DEFAULT
+Deployment completed successfully - Agent: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd
+╭───────────────────────────────────────── Deployment Success ──────────────────────────────────────────╮
+│ Agent Details:                                                                                        │
+│ Agent Name: x                                                                                         │
+│ Agent ARN: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd                      │
+│ ECR URI: 216989103085.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-x-agent:latest                │
+│ CodeBuild ID: bedrock-agentcore-x-agent-builder:6ceeef22-fc7c-4f7d-b436-96d96f7baad2                  │
+│                                                                                                       │
+│ 🚀 ARM64 container deployed to Bedrock AgentCore                                                      │
+│                                                                                                       │
+│ Next Steps:                                                                                           │
+│    agentcore status                                                                                   │
+│    agentcore invoke '{"prompt": "Hello"}'                                                             │
+│                                                                                                       │
+│ 📋 CloudWatch Logs:                                                                                   │
+│    /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-name-prefix                      │
+│ "2025/12/30/[runtime-logs]"                                                                           │
+│    /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-names "otel-rt-logs"             │
+│                                                                                                       │
+│ 🔍 GenAI Observability Dashboard:                                                                     │
+│    https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core    │
+│                                                                                                       │
+│ Note: Observability data may take up to 10 minutes to appear after first launch                       │
+│                                                                                                       │
+│ 💡 Tail logs with:                                                                                    │
+│    aws logs tail /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-name-prefix        │
+│ "2025/12/30/[runtime-logs]" --follow                                                                  │
+│    aws logs tail /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-name-prefix        │
+│ "2025/12/30/[runtime-logs]" --since 1h                                                                │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────╯

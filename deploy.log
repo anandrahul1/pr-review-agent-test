@@ -1,0 +1,104 @@
+🚀 Launching Bedrock AgentCore (codebuild mode - RECOMMENDED)...
+   • Build ARM64 containers in the cloud with CodeBuild
+   • No local Docker required (DEFAULT behavior)
+   • Production-ready deployment
+
+💡 Deployment options:
+   • agentcore deploy                → CodeBuild (current)
+   • agentcore deploy --local        → Local development
+   • agentcore deploy --local-build  → Local build + cloud deploy
+
+Using existing memory: research_crew_agent_mem-NKBDvx5pKz
+Starting CodeBuild ARM64 deployment for agent 'x' to account 216989103085 (us-east-1)
+Setting up AWS resources (ECR repository, execution roles)...
+Getting or creating ECR repository for agent: x
+ECR repository available: 216989103085.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-x-agent
+Getting or creating execution role for agent: x
+Using AWS region: us-east-1, account ID: 216989103085
+Role name: AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+Role doesn't exist, creating new execution role: AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+Starting execution role creation process for agent: x
+✓ Role creating: AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+Creating IAM role: AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+✓ Role created: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+✓ Execution policy attached: BedrockAgentCoreRuntimeExecutionPolicy-x
+Role creation complete and ready for use with Bedrock AgentCore
+Execution role available: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+Preparing CodeBuild project and uploading source...
+Getting or creating CodeBuild execution role for agent: x
+Role name: AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+CodeBuild role doesn't exist, creating new role: AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+Creating IAM role: AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+✓ Role created: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+Attaching inline policy: CodeBuildExecutionPolicy to role: AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+✓ Policy attached: CodeBuildExecutionPolicy
+Waiting for IAM role propagation...
+CodeBuild execution role creation complete: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+Using dockerignore.template with 46 patterns for zip filtering
+Including Dockerfile from /home/ubuntu/prreview/.bedrock_agentcore/x in source.zip
+Uploaded source to S3: x/source.zip
+Created CodeBuild project: bedrock-agentcore-x-agent-builder
+Starting CodeBuild build (this may take several minutes)...
+Starting CodeBuild monitoring...
+🔄 QUEUED started (total: 0s)
+✅ QUEUED completed in 1.0s
+🔄 PROVISIONING started (total: 1s)
+✅ PROVISIONING completed in 8.2s
+🔄 DOWNLOAD_SOURCE started (total: 9s)
+✅ DOWNLOAD_SOURCE completed in 2.1s
+🔄 BUILD started (total: 11s)
+✅ BUILD completed in 13.4s
+🔄 POST_BUILD started (total: 25s)
+✅ POST_BUILD completed in 8.2s
+🔄 COMPLETED started (total: 33s)
+✅ COMPLETED completed in 1.0s
+🎉 CodeBuild completed successfully in 0m 34s
+CodeBuild completed successfully
+CodeBuild project configuration saved
+Deploying to Bedrock AgentCore...
+Passing memory configuration to agent: research_crew_agent_mem-NKBDvx5pKz
+Agent created/updated: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd
+Observability is enabled, configuring observability components...
+CloudWatch Logs resource policy already configured
+X-Ray trace destination already configured
+X-Ray indexing rule already configured
+Transaction Search already fully configured
+ObservabilityDeliveryManager initialized for region: us-east-1, account: 216989103085
+✅ Logs auto-created by AWS for runtime/x-bMWWBTEmLd
+✅ Traces delivery enabled for runtime/x-bMWWBTEmLd
+Observability enabled for runtime/x-bMWWBTEmLd - logs: True, traces: True
+✅ X-Ray traces delivery enabled for agent x-bMWWBTEmLd
+🔍 GenAI Observability Dashboard:
+   https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core
+Polling for endpoint to be ready...
+Agent endpoint: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd/runtime-endpoint/DEFAULT
+Deployment completed successfully - Agent: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd
+Repository doesn't exist, creating new ECR repository: bedrock-agentcore-x-agent
+╭────────────────────────────────────────────────── Deployment Success ──────────────────────────────────────────────────╮
+│ Agent Details:                                                                                                         │
+│ Agent Name: x                                                                                                          │
+│ Agent ARN: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd                                       │
+│ ECR URI: 216989103085.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-x-agent:latest                                 │
+│ CodeBuild ID: bedrock-agentcore-x-agent-builder:f50cde3d-e2fc-4025-abeb-94dd5b4ff51d                                   │
+│                                                                                                                        │
+│ 🚀 ARM64 container deployed to Bedrock AgentCore                                                                       │
+│                                                                                                                        │
+│ Next Steps:                                                                                                            │
+│    agentcore status                                                                                                    │
+│    agentcore invoke '{"prompt": "Hello"}'                                                                              │
+│                                                                                                                        │
+│ 📋 CloudWatch Logs:                                                                                                    │
+│    /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-name-prefix "2025/12/30/[runtime-logs]"           │
+│    /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-names "otel-rt-logs"                              │
+│                                                                                                                        │
+│ 🔍 GenAI Observability Dashboard:                                                                                      │
+│    https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core                     │
+│                                                                                                                        │
+│ Note: Observability data may take up to 10 minutes to appear after first launch                                        │
+│                                                                                                                        │
+│ 💡 Tail logs with:                                                                                                     │
+│    aws logs tail /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-name-prefix                         │
+│ "2025/12/30/[runtime-logs]" --follow                                                                                   │
+│    aws logs tail /aws/bedrock-agentcore/runtimes/x-bMWWBTEmLd-DEFAULT --log-stream-name-prefix                         │
+│ "2025/12/30/[runtime-logs]" --since 1h                                                                                 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

@@ -1,0 +1,60 @@
+default_agent: x
+agents:
+  x:
+    name: x
+    entrypoint: /home/ubuntu/prreview/main.py
+    deployment_type: container
+    runtime_type: null
+    platform: linux/arm64
+    container_runtime: docker
+    source_path: /home/ubuntu/prreview
+    aws:
+      execution_role: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-2d711642b7
+      execution_role_auto_create: false
+      account: '216989103085'
+      region: us-east-1
+      ecr_repository: 216989103085.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-x-agent
+      ecr_auto_create: false
+      s3_path: null
+      s3_auto_create: false
+      network_configuration:
+        network_mode: PUBLIC
+        network_mode_config: null
+      protocol_configuration:
+        server_protocol: A2A
+      observability:
+        enabled: true
+      lifecycle_configuration:
+        idle_runtime_session_timeout: null
+        max_lifetime: null
+    bedrock_agentcore:
+      agent_id: x-bMWWBTEmLd
+      agent_arn: arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/x-bMWWBTEmLd
+      agent_session_id: e282ecc7-c93f-4a70-9e41-a9c9352512a5
+    codebuild:
+      project_name: bedrock-agentcore-x-agent-builder
+      execution_role: arn:aws:iam::216989103085:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-2d711642b7
+      source_bucket: bedrock-agentcore-codebuild-sources-216989103085-us-east-1
+    memory:
+      mode: STM_AND_LTM
+      memory_id: research_crew_agent_mem-NKBDvx5pKz
+      memory_arn: null
+      memory_name: x_memory
+      event_expiry_days: 30
+      first_invoke_memory_check_done: false
+      was_created_by_toolkit: false
+    identity:
+      credential_providers: []
+      workload: null
+    aws_jwt:
+      enabled: false
+      audiences: []
+      signing_algorithm: ES384
+      issuer_url: null
+      duration_seconds: 300
+    authorizer_configuration: null
+    request_header_configuration: null
+    oauth_configuration: null
+    api_key_env_var_name: null
+    api_key_credential_provider_name: null
+    is_generated_by_agentcore_create: false

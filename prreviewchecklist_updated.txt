@@ -1,0 +1,149 @@
+PR Review Checklist (Enhanced)
+
+═══════════════════════════════════════════════════════════════════
+SEVERITY LEVELS: 🔴 Critical | 🟡 Important | 🟢 Nice-to-have
+═══════════════════════════════════════════════════════════════════
+
+1️⃣ Context & Scope
+
+🔴 PR title is clear and meaningful
+🔴 Description explains what & why
+🟡 Jira / ticket linked (if applicable)
+🔴 Changes are within ticket scope (no unrelated code)
+
+2️⃣ Functional Correctness
+
+🔴 Feature works as expected
+🔴 Acceptance criteria met
+🔴 Edge cases handled
+🔴 No breaking changes introduced
+
+3️⃣ Code Quality & Readability
+
+🔴 Code is clean and easy to understand
+🟡 Naming conventions followed
+🟡 No duplicate or dead code
+🟢 Comments only where necessary (explain "why" not "what")
+🟡 Magic numbers extracted to constants
+🟡 Functions/methods have single responsibility
+🟢 Cyclomatic complexity is reasonable
+
+4️⃣ Architecture & Design
+
+🔴 Follows project architecture
+🔴 Correct layer separation (UI / Service / DB)
+🔴 No business logic in controllers
+🟡 Design patterns used correctly
+
+5️⃣ Performance & Scalability
+
+🟡 No unnecessary loops or heavy computations
+🔴 Efficient database queries
+🔴 No N+1 query issues
+🟡 Async / batching used where required
+🟡 Caching strategy considered where appropriate
+🟡 Large file uploads/downloads handled efficiently
+🟡 Memory leaks checked (especially for long-running processes)
+
+6️⃣ Security
+
+🔴 Input validation & sanitization
+🔴 AuthN / AuthZ checks in place
+🔴 No secrets or credentials committed
+🔴 Safe from SQL injection / XSS / CSRF
+🟡 Rate limiting implemented for APIs
+🟡 CORS configured correctly
+🟡 Dependency vulnerabilities scanned
+
+7️⃣ Error Handling & Logging
+
+🔴 Proper exception handling
+🔴 No swallowed exceptions
+🟡 Meaningful error messages
+🟡 Correct logging level used
+
+8️⃣ Testing
+
+🔴 Unit tests added or updated
+🔴 Tests cover happy & failure paths
+🔴 Existing tests not broken
+🟡 Test names are meaningful
+🟡 Integration tests added for critical flows
+🟡 Test coverage meets project threshold
+🟢 Mocks/stubs used appropriately
+
+9️⃣ CI / Build / DevOps
+
+🔴 Build passes successfully
+🔴 Linting / formatting checks pass
+🔴 No CI pipeline failures
+🟡 Infrastructure/config changes reviewed
+
+🔟 Dependencies & Config
+
+🟡 New dependencies justified
+🟡 Versions are compatible
+🟡 Environment variables documented
+🔴 No breaking config changes
+
+1️⃣1️⃣ Documentation
+
+🟡 README updated (if needed)
+🟡 API / OpenAPI updated
+🟡 DB migration documented
+🟡 Release notes updated (if required)
+🔴 Breaking changes clearly documented
+
+1️⃣2️⃣ Backwards Compatibility
+
+🔴 API versioning maintained
+🔴 Database migrations are reversible
+🟡 Feature flags used for risky changes
+🟡 Deprecation warnings added for removed features
+
+1️⃣3️⃣ Observability
+
+🟡 Metrics/monitoring added for new features
+🟡 Distributed tracing context propagated
+🔴 Alerts configured for critical paths
+
+1️⃣4️⃣ Compliance & Standards
+
+🟡 Coding standards followed
+🔴 PII / sensitive data handled properly
+🟡 Audit / traceability requirements met
+
+═══════════════════════════════════════════════════════════════════
+🧠 Quick Reviewer Decision
+═══════════════════════════════════════════════════════════════════
+
+ ✅ Approve - All critical items passed
+ 🔄 Request Changes - Critical issues found
+ 💬 Comment Only - Suggestions for improvement
+
+═══════════════════════════════════════════════════════════════════
+💡 Review Mode Guidelines
+═══════════════════════════════════════════════════════════════════
+
+🚀 HOTFIX MODE (< 50 lines)
+   Focus on: Sections 2, 6, 7, 8 (critical items only)
+   Time: 5-10 minutes
+
+📦 STANDARD REVIEW (50-500 lines)
+   Review: All sections (focus on 🔴 and 🟡 items)
+   Time: 15-30 minutes
+
+🏗️ MAJOR CHANGE (> 500 lines)
+   Review: All sections thoroughly
+   Consider: Architecture review meeting
+   Time: 45-90 minutes
+
+═══════════════════════════════════════════════════════════════════
+🎯 Pro Tips (Used by Senior Reviewers)
+═══════════════════════════════════════════════════════════════════
+
+✓ Review in multiple passes (architecture → logic → details)
+✓ Use GitHub suggestions for quick fixes
+✓ Ask questions instead of making demands
+✓ Praise good code, not just critique
+✓ Consider the context (deadline, team experience, tech debt)
