@@ -26,7 +26,9 @@ documentation_compliance_agent = Agent(
     - Improper HTTP status codes
     - Missing pagination for list endpoints
     
-    COMPLIANCE:
+    COMPLIANCE & TRACEABILITY:
+    - Jira ticket reference in PR title or description (e.g., PROJ-123, TICKET-456)
+    - Valid ticket format (PROJECT-NUMBER pattern)
     - PII/sensitive data handled properly
     - Audit/traceability requirements met
     - Coding standards followed
