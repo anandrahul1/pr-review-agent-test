@@ -58,7 +58,7 @@ jobs:
           }
           
           try:
-              response = client.invoke_runtime(
+              response = client.invoke_agent_runtime(
                   runtimeIdentifier=runtime_arn,
                   body=json.dumps(payload)
               )
