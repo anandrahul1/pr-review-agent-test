@@ -36,10 +36,10 @@ jobs:
           runtime_arn="arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
           
           # Configure agentcore CLI
-          agentcore configure -r "$runtime_arn"
+          python -m agentcore configure -r "$runtime_arn"
           
           # Invoke agent
-          agentcore invoke "{
+          python -m agentcore invoke "{
             \"jsonrpc\": \"2.0\",
             \"id\": \"pr-${pr_number}-auto\",
             \"method\": \"message/send\",
