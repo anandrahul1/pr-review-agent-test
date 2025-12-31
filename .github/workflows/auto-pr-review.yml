@@ -25,7 +25,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install agentcore CLI
-        run: pip install agentcore-cli
+        run: pip install bedrock-agentcore
 
       - name: Invoke PR Review Agent
         env:
