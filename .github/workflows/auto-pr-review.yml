@@ -24,36 +24,70 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install agentcore CLI
-        run: pip install bedrock-agentcore
+      - name: Install dependencies
+        run: pip install requests
 
       - name: Invoke PR Review Agent
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          repo="${{ github.repository }}"
-          pr_number="${{ github.event.pull_request.number }}"
-          runtime_arn="arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
+          python3 << 'EOF'
+          import requests
+          import json
+          import os
           
-          # Configure agentcore CLI
-          python -m agentcore configure -r "$runtime_arn"
+          repo = "${{ github.repository }}"
+          pr_number = "${{ github.event.pull_request.number }}"
+          runtime_arn = "arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
           
-          # Invoke agent
-          python -m agentcore invoke "{
-            \"jsonrpc\": \"2.0\",
-            \"id\": \"pr-${pr_number}-auto\",
-            \"method\": \"message/send\",
-            \"params\": {
-              \"message\": {
-                \"role\": \"user\",
-                \"parts\": [{
-                  \"kind\": \"text\",
-                  \"text\": \"Review PR #${pr_number} in ${repo}\"
-                }],
-                \"messageId\": \"pr-${pr_number}-auto\"
+          # Get runtime endpoint from CloudFormation
+          import subprocess
+          result = subprocess.run(
+              ["aws", "cloudformation", "describe-stacks",
+               "--stack-name", "PrReviewAgentStack",
+               "--query", "Stacks[0].Outputs[?OutputKey=='RuntimeEndpoint'].OutputValue",
+               "--output", "text"],
+              capture_output=True,
+              text=True
+          )
+          
+          if result.returncode != 0:
+              print(f"⚠️ Could not get runtime endpoint: {result.stderr}")
+              exit(1)
+          
+          endpoint = result.stdout.strip()
+          print(f"Using endpoint: {endpoint}")
+          
+          # Invoke agent via HTTP
+          payload = {
+              "jsonrpc": "2.0",
+              "id": f"pr-{pr_number}-auto",
+              "method": "message/send",
+              "params": {
+                  "message": {
+                      "role": "user",
+                      "parts": [{
+                          "kind": "text",
+                          "text": f"Review PR #{pr_number} in {repo}"
+                      }],
+                      "messageId": f"pr-{pr_number}-auto"
+                  }
               }
-            }
-          }" && echo "✅ Agent invoked for PR #${pr_number}" || echo "⚠️ Invocation failed"
+          }
+          
+          try:
+              response = requests.post(
+                  endpoint,
+                  json=payload,
+                  timeout=300
+              )
+              if response.status_code == 200:
+                  print(f"✅ Agent invoked for PR #{pr_number}")
+              else:
+                  print(f"⚠️ Invocation failed: {response.status_code} - {response.text}")
+          except Exception as e:
+              print(f"⚠️ Error: {e}")
+          EOF
 
       - name: Comment on PR
         uses: actions/github-script@v7
