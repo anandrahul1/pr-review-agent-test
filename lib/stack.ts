@@ -31,6 +31,9 @@ export class PrReviewAgentStack extends cdk.Stack {
       }),
       networkConfiguration: agentcore.RuntimeNetworkConfiguration.usingPublicNetwork(),
       protocolConfiguration: agentcore.ProtocolType.A2A,
+      environmentVariables: {
+        GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+      },
     });
 
     // Add Bedrock model invocation permissions

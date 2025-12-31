@@ -50,6 +50,8 @@ jobs:
         continue-on-error: true
 
       - name: Deploy with CDK
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_AGENT }}
         run: npx cdk deploy --require-approval never
 
       - name: Get Runtime ARN
