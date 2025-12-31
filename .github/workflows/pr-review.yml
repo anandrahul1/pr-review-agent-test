@@ -19,10 +19,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       
-      - name: Invoke PR Review Agent
+      - name: Install AgentCore CLI
         run: |
-          cd /tmp
-          cat > payload.json << 'EOF'
+          pip install --quiet bedrock-agentcore-sdk
+      
+      - name: Invoke PR Review Agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat > /tmp/invoke.json << 'EOF'
           {
             "jsonrpc": "2.0",
             "id": "pr-${{ github.event.pull_request.number }}",
@@ -40,12 +45,9 @@ jobs:
           }
           EOF
           
-          aws bedrock-agentcore invoke-runtime \
+          agentcore invoke \
             --runtime-id x-bMWWBTEmLd \
             --region us-east-1 \
-            --cli-binary-format raw-in-base64-out \
-            --payload file://payload.json \
-            /tmp/response.json
+            "$(cat /tmp/invoke.json)"
           
           echo "✅ PR review completed"
-          cat /tmp/response.json
