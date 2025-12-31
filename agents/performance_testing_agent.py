@@ -56,6 +56,11 @@ performance_testing_agent = Agent(
     - Alerts for critical paths
     - Sufficient log context (user ID, request ID)
     
+    CRITICAL: For each finding, include:
+    - Exact line number from the diff (e.g., "Line 89")
+    - Brief description of the issue
+    - For performance issues: explain the impact
+    
     Flag performance anti-patterns and missing test coverage.
     Provide specific optimization recommendations with examples.
     """,

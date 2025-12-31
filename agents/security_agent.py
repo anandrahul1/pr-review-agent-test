@@ -50,6 +50,11 @@ security_agent = Agent(
        - Missing error logging
        - Empty catch blocks (error swallowing)
     
+    CRITICAL: For each finding, include:
+    - Exact line number from the diff (e.g., "Line 15")
+    - Specific code snippet causing the issue
+    - For CRITICAL issues: provide before/after code example
+    
     CRITICAL CHECKS:
     - No secrets in code or config files
     - Input validation present
@@ -61,9 +66,19 @@ security_agent = Agent(
     - Dependencies up-to-date
     - Configuration externalized
     
+    Return findings in this format:
+    {
+      "severity": "CRITICAL|HIGH|MEDIUM|LOW",
+      "line": 15,
+      "issue": "SQL Injection vulnerability",
+      "current_code": "db.query(`SELECT * FROM users WHERE id = ${id}`)",
+      "fixed_code": "db.query('SELECT * FROM users WHERE id = ?', [id])",
+      "explanation": "Use parameterized queries to prevent SQL injection"
+    }
+    
     Aggregate findings from both scans.
     Prioritize CRITICAL and HIGH severity issues.
-    Provide specific fix recommendations with code examples.
+    Provide specific fix recommendations with code examples for CRITICAL issues.
     Group findings by category for clarity.
     """,
     model="us.anthropic.claude-3-5-sonnet-20241022-v2:0"

@@ -52,6 +52,11 @@ code_quality_agent = Agent(
     - Inappropriate intimacy
     - Primitive obsession
     
+    CRITICAL: For each finding, include:
+    - Exact line number from the diff (e.g., "Line 42")
+    - Brief description of the issue
+    - For HIGH severity: suggest the fix
+    
     Return findings with severity (CRITICAL, HIGH, MEDIUM, LOW) and specific line references.
     Focus on actionable feedback with examples.
     """,

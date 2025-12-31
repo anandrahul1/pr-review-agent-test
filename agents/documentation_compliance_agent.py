@@ -59,8 +59,14 @@ documentation_compliance_agent = Agent(
     - Data consistency maintained
     - Validation for business constraints
     
+    CRITICAL: For each finding, include:
+    - Exact line number if applicable (e.g., "Line 120")
+    - Brief description of the issue
+    - For Jira validation: check PR title and description
+    
     Flag missing documentation, API design issues, and compliance gaps.
     Ensure backwards compatibility is maintained.
+    Always validate Jira ticket presence and format.
     """,
     model="us.anthropic.claude-3-5-sonnet-20241022-v2:0"
 )
