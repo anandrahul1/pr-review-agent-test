@@ -32,16 +32,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 << 'EOF'
-          import boto3
           import json
-          import uuid
-          import os
+          import subprocess
           
-          runtime_arn = "arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
           repo = "${{ github.repository }}"
           pr_number = "${{ github.event.pull_request.number }}"
+          runtime_arn = "arn:aws:bedrock-agentcore:us-east-1:216989103085:runtime/prreviewagent-0wXytaGYLt"
           
-          # Create payload
           payload = {
               "jsonrpc": "2.0",
               "id": f"pr-{pr_number}-auto",
@@ -58,20 +55,21 @@ jobs:
               }
           }
           
-          # Invoke agent
-          client = boto3.client('bedrock-agent-runtime', region_name='us-east-1')
-          
           try:
-              response = client.invoke_agent(
-                  agentId=runtime_arn.split('/')[-1],
-                  agentAliasId='TSTALIASID',
-                  sessionId=str(uuid.uuid4()),
-                  inputText=f"Review PR #{pr_number} in {repo}"
+              result = subprocess.run(
+                  ["aws", "bedrock-agentcore-runtime", "invoke-agent",
+                   "--runtime-identifier", runtime_arn,
+                   "--cli-input-json", json.dumps(payload)],
+                  capture_output=True,
+                  text=True,
+                  timeout=300
               )
-              print(f"✅ Agent invoked for PR #{pr_number}")
+              if result.returncode == 0:
+                  print(f"✅ Agent invoked for PR #{pr_number}")
+              else:
+                  print(f"⚠️ Invocation failed: {result.stderr}")
           except Exception as e:
-              print(f"⚠️ Invocation failed: {e}")
-              print("Agent will need to be invoked manually")
+              print(f"⚠️ Error: {e}")
           EOF
 
       - name: Comment on PR
