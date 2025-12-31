@@ -59,11 +59,10 @@ jobs:
           
           try:
               response = client.invoke_agent_runtime(
-                  runtimeIdentifier=runtime_arn,
-                  body=json.dumps(payload)
+                  agentRuntimeArn=runtime_arn,
+                  payload=json.dumps(payload)
               )
               print(f"✅ Agent invoked for PR #{pr_number}")
-              print(f"Response: {response}")
           except Exception as e:
               print(f"⚠️ Invocation failed: {e}")
               exit(1)
